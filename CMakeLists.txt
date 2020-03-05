@@ -6,7 +6,7 @@ project ("ParseC++"
 set(CMAKE_EXECUTABLE_SUFFIX ".exe")
 
 
-set(PARSECPP_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
+set(PARSECPP_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/parsecpp)
 add_subdirectory ("parsecpp")
 
 
