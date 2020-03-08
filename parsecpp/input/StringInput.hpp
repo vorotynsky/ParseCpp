@@ -15,19 +15,46 @@
 #pragma once
 
 #include <string>
+#include "position.hpp"
+
 
 namespace parsecpp::input
 {
     class StringInput
     {
     public:
-        using iterator = std::string::const_iterator;
+        class Iterator
+        {
+        private:
+            int index;
+            Position _position;
+            const std::string *source;
+
+            Iterator(const std::string *source);
+            Iterator(const std::string *source, int index);
+
+            inline void move();
+
+        public:
+            ~Iterator() = default;
+
+            Iterator &operator++();
+            Iterator operator++(int) const;
+
+            Position position() const;
+            char operator*() const;
+
+            bool operator==(const Iterator &other) const;
+            bool operator!=(const Iterator &other) const;
+
+            friend StringInput;
+        };
 
         StringInput(const std::string &source);
         ~StringInput() = default;
 
-        typename StringInput::iterator begin() const;
-        typename StringInput::iterator end() const;
+        Iterator begin() const;
+        Iterator end() const;
 
     private:
         const std::string source;

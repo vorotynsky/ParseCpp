@@ -21,14 +21,21 @@ TEST_CASE("[string-input] empty input => 0-char")
     auto it = source.begin();
     CHECK(it == source.end());
     CHECK(*it == '\0');
+    CHECK(it.position().column == 0);
+    CHECK(it.position().line == 0);
 }
 
 TEST_CASE("[string-input] string input => by-char")
 {
     std::string test_value = "string: \"Hello world!\" ";
-    parsecpp::input::StringInput source("");
+    parsecpp::input::StringInput source(test_value);
 
-    CHECK(std::equal(source.begin(), source.end(), test_value.begin()));
+    auto tv_it = test_value.begin();
+    for(auto it = source.begin(); it != source.end(); tv_it++, ++it)
+    {
+        CHECK(*it == *tv_it);
+        CHECK(it.position().column == std::distance(test_value.begin(), tv_it));
+    }
 }
 
 TEST_CASE("[string-input] after end => 0-char")
@@ -37,4 +44,14 @@ TEST_CASE("[string-input] after end => 0-char")
     parsecpp::input::StringInput source(test_value);
 
     REQUIRE(*source.end() == '\0');
+}
+
+TEST_CASE("[string-input] new line => new position")
+{
+    parsecpp::input::StringInput source("hello\nworld");
+    auto it = source.begin();
+    while (it++ != source.end())
+        ++it;
+
+    CHECK(it.position().line == 1);
 }

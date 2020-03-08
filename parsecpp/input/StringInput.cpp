@@ -13,19 +13,79 @@
 // limitations under the License.
 
 #include "StringInput.hpp"
+#include <stdexcept>
 
 namespace parsecpp::input
 {
+    StringInput::Iterator::Iterator(const std::string *source) 
+        : Iterator(source, 0) { }
+
+    StringInput::Iterator::Iterator(const std::string *source, int index) 
+        : source(source), index(index) { }
+
+    inline void StringInput::Iterator::move()
+    {
+        if (source->size() <= index)
+            return;
+
+        if (source->at(index) == '\n')
+        {
+            _position.column = 0;
+            ++_position.line;
+        }
+        else
+        {
+            ++_position.column;
+        }
+        ++index;        
+    }
+
+    typename StringInput::Iterator &StringInput::Iterator::operator++()
+    {
+        this->move();
+        return *this;
+    }
+
+    typename StringInput::Iterator StringInput::Iterator::operator++(int) const
+    {
+        auto newIt = *this;
+        newIt.move();
+        return newIt;
+    }
+
+    Position StringInput::Iterator::position() const
+    {
+        if (_position.line + _position.column == 0 && index != 0)
+            throw std::logic_error("Can't get position on end iterator. ");
+        return _position;
+    }
+
+    char StringInput::Iterator::operator*() const
+    {
+        return (source->size() <= index) ? '\0' : (*source)[index];
+    }
+
+    bool StringInput::Iterator::operator==(const Iterator &other) const
+    {
+        return source == other.source
+            && index  == other.index;
+    }
+
+    bool StringInput::Iterator::operator!=(const Iterator &other) const
+    {
+        return !(*this == other);
+    }
+
     StringInput::StringInput(const std::string &source)
         : source(source) { }
 
-    typename StringInput::iterator StringInput::begin() const
+    typename StringInput::Iterator StringInput::begin() const
     {
-        return source.begin();
+        return Iterator(&source);
     }
 
-    typename StringInput::iterator StringInput::end() const
+    typename StringInput::Iterator StringInput::end() const
     {
-        return source.end();
+        return Iterator(&source, source.size());
     }
 } // namespace parsecpp::input
