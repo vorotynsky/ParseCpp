@@ -13,7 +13,7 @@
 // limitations under the License.
 
 #include <catch2/catch.hpp>
-#include "../parsecpp/input/StringInput.hpp"
+#include <parsecpp.hpp>
 
 TEST_CASE("[string-input] empty input => 0-char")
 {

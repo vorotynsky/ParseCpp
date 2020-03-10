@@ -17,6 +17,7 @@
 #include <string>
 #include "position.hpp"
 
+#include <stdexcept>
 
 namespace parsecpp::input
 {
@@ -30,34 +31,85 @@ namespace parsecpp::input
             Position _position;
             const std::string *source;
 
-            Iterator(const std::string *source);
-            Iterator(const std::string *source, int index);
+            Iterator(const std::string *source)
+                : Iterator(source, 0) { }
 
-            inline void move();
+            Iterator(const std::string *source, int index)
+                : source(source), index(index) { }
+
+            inline void move()
+            {
+                if (source->size() <= index)
+                    return;
+
+                if (source->at(index) == '\n')
+                {
+                    _position.column = 0;
+                    ++_position.line;
+                }
+                else
+                {
+                    ++_position.column;
+                }
+                ++index;        
+            }
 
         public:
             ~Iterator() = default;
 
-            Iterator &operator++();
-            Iterator operator++(int) const;
+            Iterator &operator++()
+            {
+                this->move();
+                return *this;
+            }
 
-            Position position() const;
-            char operator*() const;
+            Iterator operator++(int) const
+            {
+                auto newIt = *this;
+                newIt.move();
+                return newIt;
+            }
 
-            bool operator==(const Iterator &other) const;
-            bool operator!=(const Iterator &other) const;
+            Position position() const
+            {
+                if (_position.line + _position.column == 0 && index != 0)
+                    throw std::logic_error("Can't get position on end iterator. ");
+                return _position;
+            }
 
+            char operator*() const
+            {
+                return (source->size() <= index) ? '\0' : (*source)[index];
+            }
+
+            bool operator==(const Iterator &other) const
+            {
+                return source == other.source
+                    && index  == other.index;
+            }
+
+            bool operator!=(const Iterator &other) const
+            {
+                return !(*this == other);
+            }
             friend StringInput;
         };
 
-        StringInput(const std::string &source);
+        StringInput(const std::string &source)
+            : source(source) { }
+
         ~StringInput() = default;
 
-        Iterator begin() const;
-        Iterator end() const;
+        Iterator begin() const
+        {
+            return Iterator(&source);
+        }
+        Iterator end() const
+        {
+            return Iterator(&source, source.size());
+        }
 
     private:
         const std::string source;
     };
-} // namespace parsecpp::input
-
+}
