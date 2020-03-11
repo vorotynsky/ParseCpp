@@ -19,3 +19,5 @@
 
 #include "parser/parser.hpp"
 #include "parser/parserResult.hpp"
+
+#include "parser/predicateParser.hpp"
