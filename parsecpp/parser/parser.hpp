@@ -14,8 +14,23 @@
 
 #pragma once
 
-#include "input/position.hpp"
-#include "input/StringInput.hpp"
+#include "../input/StringInput.hpp"
+#include "parserResult.hpp"
 
-#include "parser/parser.hpp"
-#include "parser/parserResult.hpp"
+namespace parsecpp 
+{
+    template <typename T, typename I>
+    class Parser
+    {
+    protected:
+        Parser() = default;
+    public:
+        virtual ~Parser() = default;
+        virtual ParserResult<T, I> *execute(I input) const noexcept = 0;
+        
+        ParserResult<T, I> *operator() (I input) const noexcept
+        {
+            return this->execute(input);
+        }
+    };
+}
