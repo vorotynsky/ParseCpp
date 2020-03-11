@@ -75,9 +75,9 @@ namespace parsecpp
 
         P getInput() const
         {
-            return this->getInput();
+            return this->input;
         }
     
-        ~ParserResult() = default;
+        ~ParserResult() { }
     };
 }
