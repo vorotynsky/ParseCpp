@@ -1,4 +1,4 @@
-// Copyright 2020 vorotynsky
+// Copyright 2020 Vorotynsky Maxim
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,13 +14,24 @@
 
 #pragma once
 
-#include "input/position.hpp"
-#include "input/StringInput.hpp"
+#include "parsecpp.hpp"
 
-#include "parser/parser.hpp"
-#include "parser/parserResult.hpp"
+namespace parsecpp 
+{
+    template <typename T, typename I>
+    class Empty final : Parser<T, I>
+    {
+    public:
+        Empty(const std::string &message)
+            : message(message), Parser<T, I>() { }
 
-#include "parser/predicateParser.hpp"
-#include "parser/functor.hpp"
-#include "parser/empty.hpp"
-#include "parser/id.hpp"
+        ParserResult<T, I> *execute(I input) const noexcept override
+        {
+            return ParserResult<T, I>::Failture(message, input);
+        }
+
+        virtual ~Empty() = default;
+    private:
+        const std::string message;
+    };
+}
