@@ -19,58 +19,38 @@
 namespace parsecpp
 {
     template <typename T, typename P>
-    class ParserResult final
+    class SuccessParserResult;
+
+    template <typename T, typename P>
+    class FailtureParserResult;
+
+    template <typename T, typename P>
+    class ParserResult
     {
-    private:
-        union
-        {
-            std::string error;
-            T _value;
-        };
-
-        P input;
-
-    private:
-        bool isSuccess;
-
-        ParserResult(const P &input, bool isSuccess)
-            : input(input), isSuccess(isSuccess) { }
-
     public:
-        static ParserResult<T, P> *Success(const T &value, const P input) noexcept {
-            auto result = new ParserResult<T, P>(input, true);
-            if (result == nullptr)
-                return nullptr;
-            result->_value = value;
-            return result;
+        static inline ParserResult<T, P> *Success(const T &value, const P input) noexcept 
+        {
+            return new SuccessParserResult<T, P>(input, value);
         }
 
-        static ParserResult<T, P> *Failture(const std::string &error, const P input) noexcept
+        static inline ParserResult<T, P> *Failture(const std::string &error, const P input) noexcept
         {
-            auto result = new ParserResult<T, P>(input, false);
-            if (result == nullptr)
-                return nullptr;
-            result->error = error;
-            return result;
+            return new FailtureParserResult<T, P>(input, error);
         }
         
-        operator bool() const noexcept
+        virtual operator bool() const noexcept
         {
-            return this->isSuccess;
+            return false;
         }
         
-        const std::string &what() const
+        virtual const std::string &what() const
         {
-            if (isSuccess)
-                throw std::logic_error("Success parser result haven't a result value. ");
-            return this->error;
+            throw std::logic_error("This parser result haven't an error message. ");
         }
 
-        const T& value() const
+        virtual const T& value() const
         {
-            if (!isSuccess)
-                throw std::logic_error("Failture parser result haven't a result value. ");
-            return this->_value;
+            throw std::logic_error("This parser result haven't a result value. ");
         }
 
         P getInput() const
@@ -78,6 +58,48 @@ namespace parsecpp
             return this->input;
         }
     
-        ~ParserResult() { }
+        virtual ~ParserResult() = default;
+    protected:
+        ParserResult(const P &input)
+            : input(input) { }
+    private:
+        const P input;
+    };
+
+    template <typename T, typename P>
+    class SuccessParserResult final : private ParserResult<T, P>
+    {
+        operator bool() const noexcept override
+        {
+            return true;
+        }
+        
+        const T& value() const override
+        {
+            return _value;
+        }
+
+        SuccessParserResult(const P &input, const T &value)
+            : ParserResult<T, P> (input), _value(value) { }
+
+        const T _value;
+        
+        friend ParserResult<T, P>;
+    };
+
+    template <typename T, typename P>
+    class FailtureParserResult final : private ParserResult<T, P>
+    {        
+        const std::string &what() const override
+        {
+            return message;
+        }
+
+        FailtureParserResult(const P &input, const std::string &message)
+            : ParserResult<T, P> (input), message(message) { }
+
+        const std::string message;
+        
+        friend ParserResult<T, P>;
     };
 }
