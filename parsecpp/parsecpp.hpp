@@ -21,3 +21,4 @@
 #include "parser/parserResult.hpp"
 
 #include "parser/predicateParser.hpp"
+#include "parser/functor.hpp"
