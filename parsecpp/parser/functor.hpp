@@ -44,19 +44,27 @@ namespace parsecpp
             return newResult;
         }
 
-        static T mapValue(F f, S s)
-        {
-            return f(s);
-        }
     };
 
-    template <typename I, typename T> // T here, coz compiler can't deduce it.
+    template <typename I>
     struct Functor final
     {
-        template <typename S, typename F>
-        inline static Parser<T, I> *map(F function, const Parser<S, I> *parser)
+        /// This function used to deduce `Result<F, S>`
+        template <typename F, typename S>
+        static auto mapValue(F *f, S *s)
         {
-            return new MappedParser<F, S, T, I>(function, *parser);
+            return (*f)(*s);
+        }
+
+        /// The type of the applying S to F
+        template<typename F, typename S>
+        using Result = decltype(mapValue((F *)nullptr, (S *)nullptr));
+
+        template <typename S, typename F>
+        inline static auto map(F function, const Parser<S, I> *parser) 
+            -> Parser<Result<F, S>, I> *
+        {
+            return new MappedParser<F, S, Result<F, S>, I>(function, *parser);
         }
     };
 }

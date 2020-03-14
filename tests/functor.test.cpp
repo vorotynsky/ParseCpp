@@ -29,7 +29,7 @@ std::string mulChar(char c)
 TEST_CASE("[functor] valid input => success")
 {
     parsecpp::input::StringInput input("aloha");
-    auto mapped = parsecpp::Functor<Input, std::string>::map(mulChar, a_parser);
+    auto mapped = parsecpp::Functor<Input>::map(mulChar, a_parser);
     auto result = mapped->execute(input.begin());
     REQUIRE(*result == true);
     CHECK(result->value() == "aaa");
@@ -38,7 +38,7 @@ TEST_CASE("[functor] valid input => success")
 TEST_CASE("[functor] failture input => failture")
 {
     parsecpp::input::StringInput input("ohh...");
-    auto mapped = parsecpp::Functor<Input, std::string>::map(mulChar, a_parser);
+    auto mapped = parsecpp::Functor<Input>::map(mulChar, a_parser);
     auto result = mapped->execute(input.begin());
     REQUIRE(*result == false);
 }
@@ -46,7 +46,7 @@ TEST_CASE("[functor] failture input => failture")
 TEST_CASE("[functor] empty input => failture")
 {
     parsecpp::input::StringInput input("");
-    auto mapped = parsecpp::Functor<Input, std::string>::map(mulChar, a_parser);
+    auto mapped = parsecpp::Functor<Input>::map(mulChar, a_parser);
     auto result = mapped->execute(input.begin());
     REQUIRE(*result == false);
 }
