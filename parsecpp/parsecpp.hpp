@@ -25,3 +25,4 @@
 #include "parser/empty.hpp"
 #include "parser/id.hpp"
 #include "parser/applicative.hpp"
+#include "parser/alternative.hpp"
