@@ -14,12 +14,12 @@
 
 #pragma once
 
-#include "parsecpp.hpp"
+#include "parser.hpp"
 
 namespace parsecpp 
 {
     template <typename T, typename I>
-    class Empty final : Parser<T, I>
+    class Empty final : public Parser<T, I>
     {
     public:
         Empty(const std::string &message)

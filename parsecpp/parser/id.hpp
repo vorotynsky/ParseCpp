@@ -14,12 +14,12 @@
 
 #pragma once
 
-#include "parsecpp.hpp"
+#include "parser.hpp"
 
 namespace parsecpp 
 {
     template <typename T, typename I>
-    class Id final : Parser<T, I>
+    class Id final : public Parser<T, I>
     {
     public:
         Id(const T &value)
