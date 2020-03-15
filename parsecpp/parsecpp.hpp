@@ -24,3 +24,4 @@
 #include "parser/functor.hpp"
 #include "parser/empty.hpp"
 #include "parser/id.hpp"
+#include "parser/applicative.hpp"
