@@ -17,6 +17,8 @@
 #include <vector>
 
 #include "parser.hpp"
+#include "some.hpp"
+#include "container.hpp"
 
 namespace parsecpp
 {
@@ -40,5 +42,38 @@ namespace parsecpp
     private:
         const Parser<T, I> *parserA;
         const Parser<T, I> *parserB;
+    };
+
+    template <typename I>
+    struct Alternative {
+
+        template <typename T>
+        inline static auto many(const Parser<T, I> *parser)
+        {
+            VectParser<T> *idParser = new Id<std::vector<T>, I> (std::vector<T>());
+            VectParser<T> *someParser = new SomeParser<T, I>(parser);
+            VectParser<T> *many = new AlternativeParser<std::vector<T>, I>(someParser, idParser);   
+
+            auto node1 = new VectParserPair<T>(idParser, someParser);
+            auto node2 = new VectParserTriple<T>(many, node1);
+
+            return new Container<std::vector<T>, I, VectParserTriple<T>>(many, node2);
+        }
+
+        template <typename T>
+        inline static auto some(const Parser<T, I> *parser)
+        {
+            return new SomeParser<T, I>(parser);
+        }
+
+    private:
+        template <typename T>
+        using VectParser = Parser<std::vector<T>, I>;
+
+        template <typename T>
+        using VectParserPair = DestructPair<VectParser<T>, VectParser<T>>;
+
+        template <typename T>
+        using VectParserTriple = DestructPair<VectParser<T>, VectParserPair<T>>;
     };
 }
