@@ -50,3 +50,62 @@ TEST_CASE("[functor] empty input => failture")
     auto result = mapped->execute(input.begin());
     REQUIRE(*result == false);
 }
+
+const parsecpp::Parser<int, Input> *parser_3
+    = parsecpp::Functor<Input>::map(
+        [](char c) { return (int) c - '0'; },
+        parsecpp::PredicateMapper<Input>::map([](char c) { return c == '3'; })
+    );
+
+std::string mulCharT(char c, int times)
+{
+    return std::string(times, c);
+}
+
+TEST_CASE("[functor fmap] valid input => success")
+{
+    parsecpp::input::StringInput input("a3asas");
+    REQUIRE(parser_3->execute(++input.begin())->value() == 3);
+
+    auto mapped = parsecpp::Functor<Input>::fmap(mulCharT, a_parser);
+    auto applied = parsecpp::Applicative<Input>::apply(mapped, parser_3);
+    auto result = applied->execute(input.begin());
+    CHECK(*result == true);
+    CHECK(result->value() == "aaa");
+}
+
+TEST_CASE("[functor fmap] empty input => failture")
+{
+    parsecpp::input::StringInput input("");
+
+    auto mapped = parsecpp::Functor<Input>::fmap(mulCharT, a_parser);
+    auto applied = parsecpp::Applicative<Input>::apply(mapped, parser_3);
+    auto result = applied->execute(input.begin());
+    CHECK(*result == false);
+    CHECK(result->getInput() == input.begin());
+}
+
+TEST_CASE("[functor fmap] invalid input for parser 1 => failture")
+{
+    parsecpp::input::StringInput input("b3asas");
+    REQUIRE(parser_3->execute(++input.begin())->value() == 3);
+
+    auto mapped = parsecpp::Functor<Input>::fmap(mulCharT, a_parser);
+    auto applied = parsecpp::Applicative<Input>::apply(mapped, parser_3);
+    auto result = applied->execute(input.begin());
+    CHECK(*result == false);
+    CHECK(result->getInput() == input.begin());
+    CHECK(result->what() == "unexpected char \'b\'");
+}
+
+TEST_CASE("[functor fmap] invalid input for parser 2 => failture")
+{
+    parsecpp::input::StringInput input("a4asas");
+
+    auto mapped = parsecpp::Functor<Input>::fmap(mulCharT, a_parser);
+    auto applied = parsecpp::Applicative<Input>::apply(mapped, parser_3);
+    auto result = applied->execute(input.begin());
+    CHECK(*result == false);
+    CHECK(result->getInput() == input.begin());
+    CHECK(result->what() == "unexpected char \'4\'");
+}

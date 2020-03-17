@@ -15,6 +15,7 @@
 #pragma once
 
 #include "parser.hpp"
+#include "../utils/curry.hpp"
 
 namespace parsecpp
 {
@@ -60,11 +61,18 @@ namespace parsecpp
         template<typename F, typename S>
         using Result = decltype(mapValue((F *)nullptr, (S *)nullptr));
 
-        template <typename S, typename F>
+        template <typename F, typename S>
         inline static auto map(F function, const Parser<S, I> *parser) 
             -> Parser<Result<F, S>, I> *
         {
             return new MappedParser<F, S, Result<F, S>, I>(function, *parser);
+        }
+
+        template <typename F, typename S>
+        inline static auto fmap(F function, const Parser<S, I> *parser)
+        {
+            auto curried = functional::curry(function);
+            return map(curried, parser);
         }
     };
 }
