@@ -49,7 +49,7 @@ namespace parsecpp
                 }
                 else 
                 {
-                    auto newResult = ParserResult<std::vector<T>, I>::Failture(result->what(), input);
+                    auto newResult = ParserResult<std::vector<T>, I>::Failure(result->what(), input);
                     delete result;
                     return newResult;
                 }

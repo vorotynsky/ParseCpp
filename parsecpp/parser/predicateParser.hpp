@@ -29,12 +29,12 @@ namespace parsecpp
         {
             char c = *input;
             if (c == '\0')
-                return ParserResult<char, I>::Failture("unexpected empty input", input);
+                return ParserResult<char, I>::Failure("unexpected empty input", input);
             if (predicate (*input))
                 return ParserResult<char, I>::Success(c, ++input);
             std::string error = "unexpected char \'c\'";
             error[17] = c;
-            return ParserResult<char, I>::Failture(error, input);
+            return ParserResult<char, I>::Failure(error, input);
         }
 
     private:

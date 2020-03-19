@@ -41,14 +41,14 @@ namespace parsecpp
                 }
                 else
                 {
-                    result = ParserResult<T, I>::Failture(argRes->what(), input);
+                    result = ParserResult<T, I>::Failure(argRes->what(), input);
                 }
                 
                 delete argRes;
             }
             else
             {
-                result = ParserResult<T, I>::Failture(funcRes->what(), input);
+                result = ParserResult<T, I>::Failure(funcRes->what(), input);
             }
 
             delete funcRes;

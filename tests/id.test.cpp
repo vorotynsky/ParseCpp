@@ -54,7 +54,7 @@ TEST_CASE("[id] an input => success")
     delete result;
 }
 
-TEST_CASE("[empty] empty input => failture")
+TEST_CASE("[empty] empty input => failure")
 {
     test_value value("hello", 10);
     parsecpp::input::StringInput input("");
@@ -65,7 +65,7 @@ TEST_CASE("[empty] empty input => failture")
     delete result;
 }
 
-TEST_CASE("[empty] an input => failture")
+TEST_CASE("[empty] an input => failure")
 {
     test_value value("hello", 10);
     parsecpp::input::StringInput input("text");

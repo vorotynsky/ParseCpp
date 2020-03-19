@@ -35,7 +35,7 @@ TEST_CASE("[functor] valid input => success")
     CHECK(result->value() == "aaa");
 }
 
-TEST_CASE("[functor] failture input => failture")
+TEST_CASE("[functor] failure input => failure")
 {
     parsecpp::input::StringInput input("ohh...");
     auto mapped = parsecpp::Functor<Input>::map(mulChar, a_parser);
@@ -43,7 +43,7 @@ TEST_CASE("[functor] failture input => failture")
     REQUIRE(*result == false);
 }
 
-TEST_CASE("[functor] empty input => failture")
+TEST_CASE("[functor] empty input => failure")
 {
     parsecpp::input::StringInput input("");
     auto mapped = parsecpp::Functor<Input>::map(mulChar, a_parser);
@@ -74,7 +74,7 @@ TEST_CASE("[functor fmap] valid input => success")
     CHECK(result->value() == "aaa");
 }
 
-TEST_CASE("[functor fmap] empty input => failture")
+TEST_CASE("[functor fmap] empty input => failure")
 {
     parsecpp::input::StringInput input("");
 
@@ -85,7 +85,7 @@ TEST_CASE("[functor fmap] empty input => failture")
     CHECK(result->getInput() == input.begin());
 }
 
-TEST_CASE("[functor fmap] invalid input for parser 1 => failture")
+TEST_CASE("[functor fmap] invalid input for parser 1 => failure")
 {
     parsecpp::input::StringInput input("b3asas");
     REQUIRE(parser_3->execute(++input.begin())->value() == 3);
@@ -98,7 +98,7 @@ TEST_CASE("[functor fmap] invalid input for parser 1 => failture")
     CHECK(result->what() == "unexpected char \'b\'");
 }
 
-TEST_CASE("[functor fmap] invalid input for parser 2 => failture")
+TEST_CASE("[functor fmap] invalid input for parser 2 => failure")
 {
     parsecpp::input::StringInput input("a4asas");
 

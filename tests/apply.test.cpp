@@ -20,17 +20,17 @@ using Input = parsecpp::input::StringInput::Iterator;
 
 TEST_CASE("[applicative] function in id-parser => function application")
 {
-    char testvalue = 49;
+    char testValue = 49;
     auto func = [](char c) { return c; };
     auto functionParser = new parsecpp::Id<decltype(func), Input>(func);
-    auto valueParser = new parsecpp::Id<char, Input>(testvalue);
+    auto valueParser = new parsecpp::Id<char, Input>(testValue);
     auto appliedParser = parsecpp::Applicative<Input>::apply(functionParser, valueParser);
 
     auto it = parsecpp::input::StringInput("").begin();
     auto result = appliedParser->execute(it);
     
     CHECK(*result);
-    CHECK(result->value() == func(testvalue));
+    CHECK(result->value() == func(testValue));
     CHECK(result->getInput() == it); // because Id parser shouldn't move input. 
 }
 

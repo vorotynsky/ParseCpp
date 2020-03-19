@@ -39,7 +39,7 @@ namespace parsecpp
             if (*result)
                 newResult = ParserResult<T, I>::Success(function(result->value()), result->getInput());
             else 
-                newResult = ParserResult<T, I>::Failture(result->what().c_str(), result->getInput());
+                newResult = ParserResult<T, I>::Failure(result->what().c_str(), result->getInput());
 
             delete result;
             return newResult;

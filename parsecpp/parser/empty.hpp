@@ -27,7 +27,7 @@ namespace parsecpp
 
         ParserResult<T, I> *execute(I input) const noexcept override
         {
-            return ParserResult<T, I>::Failture(message, input);
+            return ParserResult<T, I>::Failure(message, input);
         }
 
         virtual ~Empty() = default;

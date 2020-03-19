@@ -32,7 +32,7 @@ TEST_CASE("[predicate parser] valid input => success result")
 }
 
 
-TEST_CASE("[predicate parser] invalid input => failute result")
+TEST_CASE("[predicate parser] invalid input => failure result")
 {
     parsecpp::input::StringInput input("wool");
     auto parser = parsecpp::PredicateMapper<parsecpp::input::StringInput::Iterator>::map(predicate);
@@ -44,7 +44,7 @@ TEST_CASE("[predicate parser] invalid input => failute result")
 }
 
 
-TEST_CASE("[predicate parser] empty input => failture result")
+TEST_CASE("[predicate parser] empty input => failure result")
 {
     parsecpp::input::StringInput input("");
     auto parser = parsecpp::PredicateMapper<parsecpp::input::StringInput::Iterator>::map(predicate);

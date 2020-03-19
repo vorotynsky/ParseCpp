@@ -42,13 +42,13 @@ namespace parsecpp
                 }
                 else
                 {
-                    result = ParserResult<std::tuple<T1, T2>, I>::Failture(resultB->what(), input);
+                    result = ParserResult<std::tuple<T1, T2>, I>::Failure(resultB->what(), input);
                 }
                 delete resultB;
             }
             else
             {
-                result = ParserResult<std::tuple<T1, T2>, I>::Failture(resultA->what(), input);
+                result = ParserResult<std::tuple<T1, T2>, I>::Failure(resultA->what(), input);
             }
             
             delete resultA;
@@ -79,7 +79,7 @@ namespace parsecpp
         template <typename PA, typename PB, typename... POther>
         static inline auto compose(const PA *pa, const PB *pb, const POther*... pother)
         {
-            return compose(containerize(compose(pa, pb)), pother...); // contaierize parsers
+            return compose(containerize(compose(pa, pb)), pother...); // containerise parsers
         }
 
         template <typename P>

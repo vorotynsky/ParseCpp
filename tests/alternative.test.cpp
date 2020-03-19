@@ -24,7 +24,7 @@ const parsecpp::Parser<char, Input> *a_or_b_parser
         parsecpp::PredicateMapper<Input>::map([](char c) { return c == 'b'; })
     );
 
-TEST_CASE("[alternative] firt choise in input => success")
+TEST_CASE("[alternative] first choice in input => success")
 {
     parsecpp::input::StringInput input("animal");
     auto result = a_or_b_parser->execute(input.begin());
@@ -33,7 +33,7 @@ TEST_CASE("[alternative] firt choise in input => success")
     CHECK(result->getInput() == ++input.begin());
 }
 
-TEST_CASE("[alternative] second choise in input => success")
+TEST_CASE("[alternative] second choice in input => success")
 {
     parsecpp::input::StringInput input("badger");
     auto result = a_or_b_parser->execute(input.begin());
@@ -42,14 +42,14 @@ TEST_CASE("[alternative] second choise in input => success")
     CHECK(result->getInput() == ++input.begin());
 }
 
-TEST_CASE("[alternative] invalid input => failture")
+TEST_CASE("[alternative] invalid input => failure")
 {
     parsecpp::input::StringInput input("castle");
     auto result = a_or_b_parser->execute(input.begin());
     CHECK(*result == false);
 }
 
-TEST_CASE("[alternative] empty input => failture")
+TEST_CASE("[alternative] empty input => failure")
 {
     parsecpp::input::StringInput input("");
     auto result = a_or_b_parser->execute(input.begin());

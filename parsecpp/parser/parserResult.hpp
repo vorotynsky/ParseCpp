@@ -22,7 +22,7 @@ namespace parsecpp
     class SuccessParserResult;
 
     template <typename T, typename P>
-    class FailtureParserResult;
+    class FailureParserResult;
 
     template <typename T, typename P>
     class ParserResult
@@ -33,9 +33,9 @@ namespace parsecpp
             return new SuccessParserResult<T, P>(input, value);
         }
 
-        static inline ParserResult<T, P> *Failture(const std::string &error, const P input) noexcept
+        static inline ParserResult<T, P> *Failure(const std::string &error, const P input) noexcept
         {
-            return new FailtureParserResult<T, P>(input, error);
+            return new FailureParserResult<T, P>(input, error);
         }
         
         virtual operator bool() const noexcept
@@ -88,14 +88,14 @@ namespace parsecpp
     };
 
     template <typename T, typename P>
-    class FailtureParserResult final : private ParserResult<T, P>
+    class FailureParserResult final : private ParserResult<T, P>
     {        
         const std::string &what() const override
         {
             return message;
         }
 
-        FailtureParserResult(const P &input, const std::string &message)
+        FailureParserResult(const P &input, const std::string &message)
             : ParserResult<T, P> (input), message(message) { }
 
         const std::string message;
