@@ -28,3 +28,4 @@
 #include "parser/alternative.hpp"
 #include "parser/container.hpp"
 #include "parser/composition.hpp"
+#include "parser/traversable.hpp"
