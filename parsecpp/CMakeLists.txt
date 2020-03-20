@@ -1,12 +1,14 @@
 cmake_minimum_required (VERSION 3.8)
 
 file(GLOB parsecppSRC
-    "*.cpp"
+    "*/*.hpp"
     "*.hpp"
 )
 
-add_library(parsecpp ${parsecppSRC})
+add_library(parsecpp INTERFACE)
 
-target_include_directories(parsecpp 
-    PUBLIC 
-        $<BUILD_INTERFACE:${PARSECPP_INCLUDE_DIR}>)
+target_compile_definitions(parsecpp
+    INTERFACE LIBRARY_HEADER_ONLY
+)
+
+target_include_directories(parsecpp INTERFACE .)
