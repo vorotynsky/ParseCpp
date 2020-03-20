@@ -42,7 +42,7 @@ namespace parsecpp
             ParserResult<std::vector<T>, I> *newResult;
             if (vect.size() == 0)
                 newResult = ParserResult<std::vector<T>, I>::Failure(result->what(), result->getInput());
-            else newResult = ParserResult<std::vector<T>, I>::Success(vect, init_input);
+            else newResult = ParserResult<std::vector<T>, I>::Success(vect, input);
             
             delete result;
             return newResult;

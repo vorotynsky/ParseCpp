@@ -67,7 +67,7 @@ namespace parsecpp
     };
 
     template <typename I>
-    struct Traversable
+    struct Traversable final
     {
         template <typename Iter>
         using IterType = typename std::iterator_traits<Iter>::value_type;

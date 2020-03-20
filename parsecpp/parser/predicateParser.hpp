@@ -20,7 +20,7 @@ namespace parsecpp
 {
     /// Parses a char using Predicate (char -> bool)
     template<typename I, typename Predicate>
-    struct PredicateParser : Parser<char, I>
+    struct PredicateParser final : Parser<char, I>
     {
         PredicateParser(Predicate p)
             : predicate(p) { }
@@ -36,16 +36,18 @@ namespace parsecpp
             error[17] = c;
             return ParserResult<char, I>::Failure(error, input);
         }
+        
+        virtual ~PredicateParser() = default;
 
     private:
         Predicate predicate;
     };
 
     template<typename I>
-    struct PredicateMapper
+    struct PredicateMapper final
     {
         template<typename P>
-        static PredicateParser<I, P> *map(P predicate)
+        static inline PredicateParser<I, P> *map(P predicate)
         {
             return new PredicateParser<I, P>(predicate);
         }

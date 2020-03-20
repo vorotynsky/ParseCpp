@@ -61,7 +61,7 @@ namespace parsecpp
     };
 
     template <typename I>
-    struct Applicative
+    struct Applicative final
     {
         /// The type of the applying S to F
         template<typename F, typename S>

@@ -60,7 +60,7 @@ namespace parsecpp
     };
 
     template <typename TA, typename TB>
-    auto link(const TA *a, const TB *b)
+    inline auto link(const TA *a, const TB *b)
     {
         return new DestructPair<TA, TB>(a, b);
     }

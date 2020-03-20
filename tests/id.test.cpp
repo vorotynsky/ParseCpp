@@ -56,7 +56,6 @@ TEST_CASE("[id] an input => success")
 
 TEST_CASE("[empty] empty input => failure")
 {
-    test_value value("hello", 10);
     parsecpp::input::StringInput input("");
     auto parser = parsecpp::Empty<test_value, parsecpp::input::StringInput::Iterator>("error");
     auto result = parser.execute(input.begin());
@@ -67,7 +66,6 @@ TEST_CASE("[empty] empty input => failure")
 
 TEST_CASE("[empty] an input => failure")
 {
-    test_value value("hello", 10);
     parsecpp::input::StringInput input("text");
     auto parser = parsecpp::Empty<test_value, parsecpp::input::StringInput::Iterator>("error");
     auto result = parser.execute(input.begin());

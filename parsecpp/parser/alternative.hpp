@@ -36,7 +36,9 @@ namespace parsecpp
             auto resultA = parserA->execute(input);
             if (*resultA)
                 return resultA;
-            else return parserB->execute(input);
+
+            delete resultA;
+            return parserB->execute(input); 
         }
 
     private:
