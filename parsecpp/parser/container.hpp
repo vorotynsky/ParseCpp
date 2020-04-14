@@ -40,28 +40,4 @@ namespace parsecpp
         const Parser<T, I> *parser;
         const R *resource;
     };
-
-
-    template<typename TA, typename TB>
-    struct DestructPair final 
-    {
-        const TA *first;
-        const TB *second;
-        DestructPair(const TA *first, const TB *second)
-            :first(first), second(second) { }
-
-        ~DestructPair()
-        {
-            if (first != nullptr)
-                delete first;
-            if (second != nullptr)
-                delete second;
-        }
-    };
-
-    template <typename TA, typename TB>
-    inline auto link(const TA *a, const TB *b)
-    {
-        return new DestructPair<TA, TB>(a, b);
-    }
 }
