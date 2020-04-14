@@ -17,21 +17,22 @@
 
 using Input = parsecpp::input::StringInput::Iterator;
 
+template <typename T>
 class rat final
 {
-    int *ptr;
+    T *ptr;
 public:
-    rat(int *p) : ptr(p) { }
+    rat(T *p) : ptr(p) { }
     ~rat() { ++*ptr; }
 };
 
 TEST_CASE("[container] delete parser => delete resource. expected result")
 {
     int delete_counter = 0;
-    rat *obj = new rat(&delete_counter);
+    rat<int> *obj = new rat<int>(&delete_counter);
     const std::string error = "Rats on the board!";
     auto emptyP = new parsecpp::Empty<char, Input>(error);
-    auto parser = new parsecpp::Container<char, Input, rat> (emptyP, obj);
+    auto parser = new parsecpp::Container<char, Input, rat<int>> (emptyP, obj);
 
     parsecpp::input::StringInput input("The Age of Rats");
     auto result = parser->execute(input.begin());
@@ -44,4 +45,39 @@ TEST_CASE("[container] delete parser => delete resource. expected result")
     delete emptyP;
 
     CHECK(delete_counter == 1);
+}
+
+TEST_CASE("[container] delete many intems => delete resources")
+{
+    using namespace parsecpp::types;
+
+    struct {
+        int a = 0;
+        long b = 0;
+        short c = 0;
+    } delete_counters = {0, 0, 0};
+
+
+    auto container = new DestructingContainer ({
+        dwrap(new rat<int>(&delete_counters.a)),
+        dwrap(new rat<long>(&delete_counters.b)),
+        dwrap(new rat<short>(&delete_counters.c))
+    });
+
+    const std::string error = "Rats on the board!";
+    auto emptyP = new parsecpp::Empty<char, Input>(error);
+    auto parser = new parsecpp::Container<char, Input, DestructingContainer>(emptyP, container);
+
+    parsecpp::input::StringInput input("The Age of Rats");
+    auto result = parser->execute(input.begin());
+
+    CHECK(*result == false);
+    CHECK(result->what() == error);
+
+    delete parser;
+    delete emptyP;
+
+    CHECK(delete_counters.a == 1);
+    CHECK(delete_counters.b == 1);
+    CHECK(delete_counters.c == 1);
 }
