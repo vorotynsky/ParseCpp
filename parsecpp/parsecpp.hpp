@@ -30,4 +30,6 @@
 #include "parser/composition.hpp"
 #include "parser/traversable.hpp"
 
+#include "common/character.hpp"
+
 #include "utils/container.hpp"
