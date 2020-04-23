@@ -20,8 +20,8 @@ using Input = parsecpp::input::StringInput::Iterator;
 const parsecpp::Parser<char, Input> *a_or_b_parser
     = new parsecpp::AlternativeParser<char, Input> 
     (
-        parsecpp::PredicateMapper<Input>::map([](char c) { return c == 'a'; }),
-        parsecpp::PredicateMapper<Input>::map([](char c) { return c == 'b'; })
+        new parsecpp::common::CharParser<Input>('a'),
+        new parsecpp::common::CharParser<Input>('b')
     );
 
 TEST_CASE("[alternative] first choice in input => success")

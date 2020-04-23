@@ -17,14 +17,9 @@
 
 using Input = parsecpp::input::StringInput::Iterator;
 
-const parsecpp::Parser<char, Input> *x_parser
-    = parsecpp::PredicateMapper<Input>::map([](char c) { return c == 'x'; });
-
-const parsecpp::Parser<char, Input> *y_parser
-    = parsecpp::PredicateMapper<Input>::map([](char c) { return c == 'y'; });
-
-const parsecpp::Parser<char, Input> *z_parser
-    = parsecpp::PredicateMapper<Input>::map([](char c) { return c == 'z'; });
+const parsecpp::Parser<char, Input> *x_parser = new parsecpp::common::CharParser<Input>('x');
+const parsecpp::Parser<char, Input> *y_parser = new parsecpp::common::CharParser<Input>('y');
+const parsecpp::Parser<char, Input> *z_parser = new parsecpp::common::CharParser<Input>('z');
 
 TEST_CASE("[monoid, compose] valid input for 3 parsers => success")
 {
