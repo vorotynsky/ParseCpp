@@ -14,9 +14,9 @@
 
 #pragma once
 
-#include "parser.hpp"
+#include <parser/parser.hpp>
 
-namespace parsecpp 
+namespace parsecpp::common
 {
     /// Parses a char using Predicate (char -> bool)
     template<typename I, typename Predicate>

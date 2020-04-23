@@ -20,7 +20,6 @@
 #include "parser/parser.hpp"
 #include "parser/parserResult.hpp"
 
-#include "parser/predicateParser.hpp"
 #include "parser/functor.hpp"
 #include "parser/empty.hpp"
 #include "parser/id.hpp"
@@ -30,6 +29,7 @@
 #include "parser/composition.hpp"
 #include "parser/traversable.hpp"
 
+#include "common/predicateParser.hpp"
 #include "common/character.hpp"
 
 #include "utils/container.hpp"
