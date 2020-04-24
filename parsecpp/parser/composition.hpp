@@ -117,7 +117,12 @@ namespace parsecpp
         template <typename PA, typename PB, typename... POther>
         static inline auto leftFoldCompose(const PA *pa, const PB *pb, const POther*... pother)
         {
-            return leftFoldCompose(containerize(leftFoldCompose(pa, pb)), pother...);
+            auto compose1 = leftFoldCompose(pa, pb);
+            auto compose2 = leftFoldCompose(compose1, pother...);
+            auto container  = new types::DestructingContainer({
+                types::dwrap(compose1), types::dwrap(compose2)
+            });
+            return containerize(compose2, container);
         }
 
         template <typename PA, typename PB, typename... POther>
@@ -129,7 +134,12 @@ namespace parsecpp
         template <typename PA, typename PB, typename... POther>
         static inline auto compose(const PA *pa, const PB *pb, const POther*... pother)
         {
-            return compose(containerize(compose(pa, pb)), pother...);
+            auto compose1 = compose(pa, pb);
+            auto compose2 = compose(compose1, pother...);
+            auto container  = new types::DestructingContainer({
+                types::dwrap(compose1), types::dwrap(compose2)
+            });
+            return containerize(compose2, container);
         }
 
         template <typename P>
@@ -140,11 +150,11 @@ namespace parsecpp
 
     private:
         template <typename T>
-        static inline auto containerize(const Parser<T, I> *parser)
+        static inline auto containerize(const Parser<T, I> *parser, const types::DestructingContainer *container)
         {
-            return new Container<T, I, const Parser<T, I>>(parser, parser);
+            return new Container<T, I, const types::DestructingContainer>(parser, container);
         }
-
+        
         template <typename T1, typename T2>
         static inline auto leftFlattenCompose2(const Parser<T1, I> *p1, const Parser<T2, I> *p2)
         {
