@@ -17,26 +17,21 @@
 
 using Input = parsecpp::input::StringInput::Iterator;
 
-const parsecpp::Parser<char, Input> *x_parser
-    = parsecpp::PredicateMapper<Input>::map([](char c) { return c == 'x'; });
+const parsecpp::Parser<char, Input> *x_parser = new parsecpp::common::CharParser<Input>('x');
+const parsecpp::Parser<char, Input> *y_parser = new parsecpp::common::CharParser<Input>('y');
+const parsecpp::Parser<char, Input> *z_parser = new parsecpp::common::CharParser<Input>('z');
 
-const parsecpp::Parser<char, Input> *y_parser
-    = parsecpp::PredicateMapper<Input>::map([](char c) { return c == 'y'; });
-
-const parsecpp::Parser<char, Input> *z_parser
-    = parsecpp::PredicateMapper<Input>::map([](char c) { return c == 'z'; });
-
-TEST_CASE("[monoid] valid input for 3 parsers => success")
+TEST_CASE("[monoid, compose] valid input for 3 parsers => success")
 {
     parsecpp::input::StringInput input("xyz");
     auto combined = parsecpp::Monoid<Input>::compose(x_parser, y_parser, z_parser);
     auto result = combined->execute(input.begin());
 
     CHECK(*result == true);
-    CHECK(result->value() == std::make_tuple(std::make_tuple('x', 'y'), 'z'));
+    CHECK(result->value() == std::make_tuple('x', 'y', 'z'));
 }
 
-TEST_CASE("[monoid] invalid input for first parsers => failure")
+TEST_CASE("[monoid, compose] invalid input for first parsers => failure")
 {
     parsecpp::input::StringInput input("yyz");
     auto combined = parsecpp::Monoid<Input>::compose(x_parser, y_parser, z_parser);
@@ -46,7 +41,7 @@ TEST_CASE("[monoid] invalid input for first parsers => failure")
     CHECK(result->getInput() == input.begin());
 }
 
-TEST_CASE("[monoid] invalid input for second parsers => failure")
+TEST_CASE("[monoid, compose] invalid input for second parsers => failure")
 {
     parsecpp::input::StringInput input("xxz");
     auto combined = parsecpp::Monoid<Input>::compose(x_parser, y_parser, z_parser);
@@ -56,7 +51,7 @@ TEST_CASE("[monoid] invalid input for second parsers => failure")
     CHECK(result->getInput() == input.begin());
 }
 
-TEST_CASE("[monoid] invalid input for third parsers => failure")
+TEST_CASE("[monoid, compose] invalid input for third parsers => failure")
 {
     parsecpp::input::StringInput input("xyy");
     auto combined = parsecpp::Monoid<Input>::compose(x_parser, y_parser, z_parser);
@@ -66,8 +61,7 @@ TEST_CASE("[monoid] invalid input for third parsers => failure")
     CHECK(result->getInput() == input.begin());
 }
 
-
-TEST_CASE("[monoid] empty input => failure")
+TEST_CASE("[monoid, compose] empty input => failure")
 {
     parsecpp::input::StringInput input("");
     auto combined = parsecpp::Monoid<Input>::compose(x_parser, y_parser, z_parser);
@@ -77,3 +71,54 @@ TEST_CASE("[monoid] empty input => failure")
     CHECK(result->getInput() == input.begin());
 }
 
+
+
+TEST_CASE("[monoid, lfold compose] valid input for 3 parsers => success")
+{
+    parsecpp::input::StringInput input("xyz");
+    auto combined = parsecpp::Monoid<Input>::leftFoldCompose(x_parser, y_parser, z_parser);
+    auto result = combined->execute(input.begin());
+
+    CHECK(*result == true);
+    CHECK(result->value() == std::make_tuple(std::make_tuple('x', 'y'), 'z'));
+}
+
+TEST_CASE("[monoid, lfold compose] invalid input for first parsers => failure")
+{
+    parsecpp::input::StringInput input("yyz");
+    auto combined = parsecpp::Monoid<Input>::leftFoldCompose(x_parser, y_parser, z_parser);
+    auto result = combined->execute(input.begin());
+
+    CHECK(*result == false);
+    CHECK(result->getInput() == input.begin());
+}
+
+TEST_CASE("[monoid, lfold compose] invalid input for second parsers => failure")
+{
+    parsecpp::input::StringInput input("xxz");
+    auto combined = parsecpp::Monoid<Input>::leftFoldCompose(x_parser, y_parser, z_parser);
+    auto result = combined->execute(input.begin());
+
+    CHECK(*result == false);
+    CHECK(result->getInput() == input.begin());
+}
+
+TEST_CASE("[monoid, lfold compose] invalid input for third parsers => failure")
+{
+    parsecpp::input::StringInput input("xyy");
+    auto combined = parsecpp::Monoid<Input>::leftFoldCompose(x_parser, y_parser, z_parser);
+    auto result = combined->execute(input.begin());
+
+    CHECK(*result == false);
+    CHECK(result->getInput() == input.begin());
+}
+
+TEST_CASE("[monoid, lfold compose] empty input => failure")
+{
+    parsecpp::input::StringInput input("");
+    auto combined = parsecpp::Monoid<Input>::leftFoldCompose(x_parser, y_parser, z_parser);
+    auto result = combined->execute(input.begin());
+
+    CHECK(*result == false);
+    CHECK(result->getInput() == input.begin());
+}

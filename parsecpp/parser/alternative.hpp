@@ -19,6 +19,7 @@
 #include "parser.hpp"
 #include "some.hpp"
 #include "container.hpp"
+#include "../utils/container.hpp"
 
 namespace parsecpp
 {
@@ -54,12 +55,15 @@ namespace parsecpp
         {
             VectParser<T> *idParser = new Id<std::vector<T>, I> (std::vector<T>());
             VectParser<T> *someParser = new SomeParser<T, I>(parser);
-            VectParser<T> *many = new AlternativeParser<std::vector<T>, I>(someParser, idParser);   
+            VectParser<T> *many = new AlternativeParser<std::vector<T>, I>(someParser, idParser);
+            
+            auto container = new types::DestructingContainer ({
+                types::dwrap(idParser),
+                types::dwrap(someParser),
+                types::dwrap(many)
+            });
 
-            auto node1 = new VectParserPair<T>(idParser, someParser);
-            auto node2 = new VectParserTriple<T>(many, node1);
-
-            return new Container<std::vector<T>, I, VectParserTriple<T>>(many, node2);
+            return new Container<std::vector<T>, I, types::DestructingContainer>(many, container);
         }
 
         template <typename T>
@@ -71,11 +75,5 @@ namespace parsecpp
     private:
         template <typename T>
         using VectParser = Parser<std::vector<T>, I>;
-
-        template <typename T>
-        using VectParserPair = DestructPair<VectParser<T>, VectParser<T>>;
-
-        template <typename T>
-        using VectParserTriple = DestructPair<VectParser<T>, VectParserPair<T>>;
     };
 }

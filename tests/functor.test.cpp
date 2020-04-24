@@ -18,8 +18,7 @@
 
 using Input = parsecpp::input::StringInput::Iterator;
 
-const parsecpp::Parser<char, Input> *a_parser
-    = parsecpp::PredicateMapper<Input>::map([](char c) { return c == 'a'; });
+const parsecpp::Parser<char, Input> *a_parser = new parsecpp::common::CharParser<Input>('a');
 
 std::string mulChar(char c)
 {
@@ -54,7 +53,7 @@ TEST_CASE("[functor] empty input => failure")
 const parsecpp::Parser<int, Input> *parser_3
     = parsecpp::Functor<Input>::map(
         [](char c) { return (int) c - '0'; },
-        parsecpp::PredicateMapper<Input>::map([](char c) { return c == '3'; })
+        new parsecpp::common::CharParser<Input>('3')
     );
 
 std::string mulCharT(char c, int times)

@@ -15,6 +15,9 @@
 #pragma once
 
 #include "parser.hpp"
+#include "functor.hpp"
+#include <common/character.hpp>
+#include <utils/container.hpp>
 
 #include <vector>
 #include <algorithm>
@@ -77,5 +80,28 @@ namespace parsecpp
         {
             return new TraversedParser<F, IterType<Iter>, Iter, I>(generator, begin, end);
         };
+
+        static Parser<std::string, I> *string(const std::string &exemplar)
+        {
+            auto string_parser = traverse(charParser, exemplar.cbegin(), exemplar.cend());
+            auto parser = Functor<I>::map(generate, string_parser);
+
+            auto container = new types::DestructingContainer({
+                types::dwrap(string_parser), types::dwrap(parser)
+            });
+
+            return new Container<std::string, I, types::DestructingContainer>(parser, container);
+        }
+
+    private:
+        static Parser<char, I> *charParser(const char c)
+        {
+            return new parsecpp::common::CharParser<I>(c);
+        }
+
+        static std::string generate(const std::vector<char> &container)
+        {
+            return std::string(container.cbegin(), container.cend());
+        }
     };
 }
