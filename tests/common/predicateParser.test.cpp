@@ -23,7 +23,7 @@ bool predicate(char c)
 TEST_CASE("[predicate parser] valid input => success result")
 {
     parsecpp::input::StringInput input("cool");
-    auto parser = parsecpp::PredicateMapper<parsecpp::input::StringInput::Iterator>::map(predicate);
+    auto parser = parsecpp::common::PredicateMapper<parsecpp::input::StringInput::Iterator>::map(predicate);
     auto result = parser->execute(input.begin());
     CHECK(*result == true);
     CHECK(result->value() == 'c');
@@ -35,7 +35,7 @@ TEST_CASE("[predicate parser] valid input => success result")
 TEST_CASE("[predicate parser] invalid input => failure result")
 {
     parsecpp::input::StringInput input("wool");
-    auto parser = parsecpp::PredicateMapper<parsecpp::input::StringInput::Iterator>::map(predicate);
+    auto parser = parsecpp::common::PredicateMapper<parsecpp::input::StringInput::Iterator>::map(predicate);
     auto result = parser->execute(input.begin());
     CHECK(*result == false);
     CHECK(result->what() == "unexpected char 'w'");
@@ -47,7 +47,7 @@ TEST_CASE("[predicate parser] invalid input => failure result")
 TEST_CASE("[predicate parser] empty input => failure result")
 {
     parsecpp::input::StringInput input("");
-    auto parser = parsecpp::PredicateMapper<parsecpp::input::StringInput::Iterator>::map(predicate);
+    auto parser = parsecpp::common::PredicateMapper<parsecpp::input::StringInput::Iterator>::map(predicate);
     auto result = parser->execute(input.begin());
     CHECK(*result == false);
     CHECK(result->what() == "unexpected empty input");

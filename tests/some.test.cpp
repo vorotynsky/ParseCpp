@@ -18,8 +18,7 @@
 
 using Input = parsecpp::input::StringInput::Iterator;
 
-const parsecpp::Parser<char, Input> *m_parser
-    = parsecpp::PredicateMapper<Input>::map([](char c) { return c == 'm'; });
+const parsecpp::Parser<char, Input> *m_parser = new parsecpp::common::CharParser<Input>('m');
 
 TEST_CASE("[some] valid 1 char in input => success")
 {

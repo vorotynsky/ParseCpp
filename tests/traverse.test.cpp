@@ -20,7 +20,7 @@ using Input = parsecpp::input::StringInput::Iterator;
 
 typename parsecpp::Parser<char, Input> *charParser(const char c)
 {
-    return parsecpp::PredicateMapper<Input>::map([c](const char x) { return c == x;});
+    return new parsecpp::common::CharParser<Input>(c);
 }
 
 TEST_CASE("[traverse] string parser => success")

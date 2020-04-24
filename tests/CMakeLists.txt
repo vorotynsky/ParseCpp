@@ -6,6 +6,7 @@ find_package(Catch2 REQUIRED)
 
 file(GLOB test_parsecppSRC
     "*.cpp"
+    "*/*.cpp"
 )
 
 add_executable(tests ${test_parsecppSRC})

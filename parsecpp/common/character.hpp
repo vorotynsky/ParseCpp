@@ -14,42 +14,32 @@
 
 #pragma once
 
-#include "parser.hpp"
+#include <parser/parser.hpp>
 
-namespace parsecpp 
+namespace parsecpp::common
 {
-    /// Parses a char using Predicate (char -> bool)
-    template<typename I, typename Predicate>
-    struct PredicateParser final : Parser<char, I>
+    template <typename I>
+    class CharParser : public Parser<char, I>
     {
-        PredicateParser(Predicate p)
-            : predicate(p) { }
+    public:
+        CharParser(const char exemplar)
+            : exemplar(exemplar), Parser<char, I>() { }
+
+        virtual ~CharParser() = default;
 
         ParserResult<char, I> *execute(I input) const noexcept override
         {
             char c = *input;
+            if (exemplar == c)
+                return ParserResult<char, I>::Success(c, ++input);
             if (c == '\0')
                 return ParserResult<char, I>::Failure("unexpected empty input", input);
-            if (predicate (*input))
-                return ParserResult<char, I>::Success(c, ++input);
             std::string error = "unexpected char \'c\'";
             error[17] = c;
             return ParserResult<char, I>::Failure(error, input);
         }
-        
-        virtual ~PredicateParser() = default;
 
     private:
-        Predicate predicate;
-    };
-
-    template<typename I>
-    struct PredicateMapper final
-    {
-        template<typename P>
-        static inline PredicateParser<I, P> *map(P predicate)
-        {
-            return new PredicateParser<I, P>(predicate);
-        }
+        const char exemplar;
     };
 }
