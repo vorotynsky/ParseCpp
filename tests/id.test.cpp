@@ -16,6 +16,8 @@
 #include <parsecpp.hpp>
 #include <string>
 
+using Input = parsecpp::input::StringInput::Iterator;
+
 struct test_value final
 {
     test_value(const std::string &a, int b)
@@ -34,7 +36,7 @@ TEST_CASE("[id] empty input => success")
 {
     test_value value("hello", 10);
     parsecpp::input::StringInput input("");
-    auto parser = parsecpp::Id<test_value, parsecpp::input::StringInput::Iterator>(value);
+    auto parser = parsecpp::Id<test_value, Input>(value);
     auto result = parser.execute(input.begin());
     CHECK(*result == true);
     CHECK(result->getInput() == input.begin());
@@ -46,7 +48,7 @@ TEST_CASE("[id] an input => success")
 {
     test_value value("hello", 10);
     parsecpp::input::StringInput input("text");
-    auto parser = parsecpp::Id<test_value, parsecpp::input::StringInput::Iterator>(value);
+    auto parser = parsecpp::Id<test_value, Input>(value);
     auto result = parser.execute(input.begin());
     CHECK(*result == true);
     CHECK(result->getInput() == input.begin());
@@ -57,7 +59,7 @@ TEST_CASE("[id] an input => success")
 TEST_CASE("[empty] empty input => failure")
 {
     parsecpp::input::StringInput input("");
-    auto parser = parsecpp::Empty<test_value, parsecpp::input::StringInput::Iterator>("error");
+    auto parser = parsecpp::Empty<test_value, Input>("error");
     auto result = parser.execute(input.begin());
     CHECK(*result == false);
     CHECK(result->getInput() == input.begin());
@@ -67,10 +69,36 @@ TEST_CASE("[empty] empty input => failure")
 TEST_CASE("[empty] an input => failure")
 {
     parsecpp::input::StringInput input("text");
-    auto parser = parsecpp::Empty<test_value, parsecpp::input::StringInput::Iterator>("error");
+    auto parser = parsecpp::Empty<test_value, Input>("error");
     auto result = parser.execute(input.begin());
     CHECK(*result == false);
     CHECK(result->getInput() == input.begin());
     delete result;
 }
 
+TEST_CASE("[label] success => success")
+{
+    test_value value("hello", 10);
+    parsecpp::input::StringInput input("text");
+    auto parser = parsecpp::Id<test_value, Input>(value);
+    auto labeled = parsecpp::Label<test_value, Input>(&parser, "label error message");
+    auto result = labeled.execute(input.begin());
+    
+    CHECK(*result == true);
+    CHECK(result->getInput() == input.begin());
+    CHECK(result->value() == value);
+    delete result;
+}
+
+TEST_CASE("[label] failure => failure with replaced message ")
+{
+    parsecpp::input::StringInput input("");
+    auto parser = parsecpp::Empty<test_value, Input>("error");
+    auto labeled = parsecpp::Label<test_value, Input>(&parser, "label error message");
+    auto result = labeled.execute(input.begin());
+
+    CHECK(*result == false);
+    CHECK(result->what() == "label error message");
+    CHECK(result->getInput() == input.begin());
+    delete result;
+}

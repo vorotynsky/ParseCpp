@@ -34,4 +34,25 @@ namespace parsecpp
     private:
         const T value;
     };
+
+    template <typename T, typename I>
+    class Label final : public Parser<T, I>
+    {
+    public:
+        Label(const Parser<T, I> *parser, const std::string &message)
+            : parser(parser), message(message), Parser<T, I>() { }
+
+        ParserResult<T, I> *execute(I input) const noexcept override
+        {
+            auto result = parser->execute(input);
+            if (*result)
+                return result;
+            auto newResult = ParserResult<T, I>::Failure(message, result->getInput());
+            delete result;
+            return newResult;
+        }
+    private:
+        const Parser<T, I> *parser;
+        std::string message;
+    };
 }
