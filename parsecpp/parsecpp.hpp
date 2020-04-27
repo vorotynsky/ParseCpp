@@ -14,6 +14,9 @@
 
 #pragma once
 
+#define PARSECPP_STATIC_API static constexpr
+
+
 #include "input/position.hpp"
 #include "input/StringInput.hpp"
 

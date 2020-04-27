@@ -51,7 +51,7 @@ namespace parsecpp
     struct Alternative {
 
         template <typename T>
-        inline static auto many(const Parser<T, I> *parser)
+        PARSECPP_STATIC_API auto many(const Parser<T, I> *parser)
         {
             VectParser<T> *idParser = new Id<std::vector<T>, I> (std::vector<T>());
             VectParser<T> *someParser = new SomeParser<T, I>(parser);
@@ -67,7 +67,7 @@ namespace parsecpp
         }
 
         template <typename T>
-        inline static auto some(const Parser<T, I> *parser)
+        PARSECPP_STATIC_API auto some(const Parser<T, I> *parser)
         {
             return new SomeParser<T, I>(parser);
         }

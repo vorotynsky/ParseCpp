@@ -16,8 +16,8 @@
 
 #include "parser.hpp"
 #include "functor.hpp"
-#include <common/character.hpp>
-#include <utils/container.hpp>
+#include "common/character.hpp"
+#include "utils/container.hpp"
 
 #include <vector>
 #include <algorithm>
@@ -76,12 +76,12 @@ namespace parsecpp
         using IterType = typename std::iterator_traits<Iter>::value_type;
 
         template <typename Iter, typename F>
-        static inline auto traverse(const F generator, Iter begin, Iter end)
+        PARSECPP_STATIC_API auto traverse(const F generator, Iter begin, Iter end)
         {
             return new TraversedParser<F, IterType<Iter>, Iter, I>(generator, begin, end);
         };
 
-        static Parser<std::string, I> *string(const std::string &exemplar)
+        PARSECPP_STATIC_API Parser<std::string, I> *string(const std::string &exemplar)
         {
             auto string_parser = traverse(charParser, exemplar.cbegin(), exemplar.cend());
             auto parser = Functor<I>::map(generate, string_parser);
@@ -94,12 +94,12 @@ namespace parsecpp
         }
 
     private:
-        static Parser<char, I> *charParser(const char c)
+        PARSECPP_STATIC_API Parser<char, I> *charParser(const char c)
         {
             return new parsecpp::common::CharParser<I>(c);
         }
 
-        static std::string generate(const std::vector<char> &container)
+        PARSECPP_STATIC_API std::string generate(const std::vector<char> &container)
         {
             return std::string(container.cbegin(), container.cend());
         }

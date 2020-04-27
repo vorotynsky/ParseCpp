@@ -19,19 +19,19 @@
 namespace parsecpp::functional
 {
     template <typename... Types>
-    auto lflatten(const std::tuple<Types...> &tuple)
+    constexpr auto lflatten(const std::tuple<Types...> &tuple)
     {
         return tuple;
     }
 
     template <typename A, typename B, typename... C>
-    auto lflatten(const std::tuple<std::tuple<A, B>, C...> &tuple)
+    constexpr auto lflatten(const std::tuple<std::tuple<A, B>, C...> &tuple)
     {
         return std::tuple_cat(lflatten(std::get<0>(tuple)), std::make_tuple(std::get<1>(tuple)));
     }
 
     template <typename A, typename B, typename C, typename... D>
-    auto lflatten(const std::tuple<std::tuple<std::tuple<A, B>, C>, D...> &tuple)
+    constexpr auto lflatten(const std::tuple<std::tuple<std::tuple<A, B>, C>, D...> &tuple)
     {
         return std::tuple_cat(lflatten(std::get<0>(tuple)), std::make_tuple(std::get<1>(tuple)));
     }

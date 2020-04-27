@@ -103,19 +103,19 @@ namespace parsecpp
     struct Monoid final
     {
         template <typename T1, typename T2>
-        static inline auto compose2(const Parser<T1, I> *p1, const Parser<T2, I> *p2)
+        PARSECPP_STATIC_API auto compose2(const Parser<T1, I> *p1, const Parser<T2, I> *p2)
         {
             return new FoldComposition<T1, T2, I>(p1, p2);
         }
 
         template <typename PA, typename PB, typename... POther>
-        static inline auto leftFoldCompose(const PA *pa, const PB *pb)
+        PARSECPP_STATIC_API auto leftFoldCompose(const PA *pa, const PB *pb)
         {
             return compose2(pa, pb);
         }
 
         template <typename PA, typename PB, typename... POther>
-        static inline auto leftFoldCompose(const PA *pa, const PB *pb, const POther*... pother)
+        PARSECPP_STATIC_API auto leftFoldCompose(const PA *pa, const PB *pb, const POther*... pother)
         {
             auto compose1 = leftFoldCompose(pa, pb);
             auto compose2 = leftFoldCompose(compose1, pother...);
@@ -126,13 +126,13 @@ namespace parsecpp
         }
 
         template <typename PA, typename PB, typename... POther>
-        static inline auto compose(const PA *pa, const PB *pb)
+        PARSECPP_STATIC_API auto compose(const PA *pa, const PB *pb)
         {
             return leftFlattenCompose2(pa, pb);
         }
 
         template <typename PA, typename PB, typename... POther>
-        static inline auto compose(const PA *pa, const PB *pb, const POther*... pother)
+        PARSECPP_STATIC_API auto compose(const PA *pa, const PB *pb, const POther*... pother)
         {
             auto compose1 = compose(pa, pb);
             auto compose2 = compose(compose1, pother...);
@@ -143,20 +143,20 @@ namespace parsecpp
         }
 
         template <typename P>
-        static inline Parser<P, I> *id(const P& value)
+        PARSECPP_STATIC_API Parser<P, I> *id(const P& value)
         {
             return new Id<P, I>(value);
         }
 
     private:
         template <typename T>
-        static inline auto containerize(const Parser<T, I> *parser, const types::DestructingContainer *container)
+        PARSECPP_STATIC_API auto containerize(const Parser<T, I> *parser, const types::DestructingContainer *container)
         {
             return new Container<T, I, const types::DestructingContainer>(parser, container);
         }
         
         template <typename T1, typename T2>
-        static inline auto leftFlattenCompose2(const Parser<T1, I> *p1, const Parser<T2, I> *p2)
+        PARSECPP_STATIC_API auto leftFlattenCompose2(const Parser<T1, I> *p1, const Parser<T2, I> *p2)
         {
             return new LeftFlattenComposition<T1, T2, I>(p1, p2);
         }
