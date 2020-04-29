@@ -31,8 +31,11 @@
 #include "parser/container.hpp"
 #include "parser/composition.hpp"
 #include "parser/traversable.hpp"
+#include "parser/ignore.hpp"
 
 #include "common/predicateParser.hpp"
 #include "common/character.hpp"
 
 #include "utils/container.hpp"
+#include "utils/curry.hpp"
+#include "utils/flatten.hpp"
