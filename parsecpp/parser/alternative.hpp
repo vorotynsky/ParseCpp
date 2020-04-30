@@ -18,6 +18,7 @@
 
 #include "parser.hpp"
 #include "some.hpp"
+#include "step.hpp"
 #include "container.hpp"
 #include "../utils/container.hpp"
 
@@ -70,6 +71,26 @@ namespace parsecpp
         PARSECPP_STATIC_API auto some(const Parser<T, I> *parser)
         {
             return new SomeParser<T, I>(parser);
+        }
+
+        template <typename T, typename S>
+        PARSECPP_STATIC_API auto stepBy(const Parser<T, I> *parser, const Parser<S, I> *stepper)
+        {
+            auto id = new Id<std::vector<T>, I>(std::vector<T>());
+            auto steps = new StepParser<T, S, I>(parser, stepper);
+            auto stepby = new AlternativeParser<std::vector<T>, I>(steps, id);
+
+            auto container = new types::DestructingContainer ({
+                types::dwrap(id), types::dwrap(steps), types::dwrap(stepby)
+            });
+
+            return new Container<std::vector<T>, I, types::DestructingContainer>(stepby, container);
+        }
+
+        template <typename T, typename S>
+        PARSECPP_STATIC_API auto stepBy1(const Parser<T, I> *parser, const Parser<S, I> *stepper)
+        {
+            return new StepParser<T, S, I>(parser, stepper);
         }
 
     private:
