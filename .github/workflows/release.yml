@@ -1,0 +1,82 @@
+name: Release CI
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: false
+    - name: Build artifacts
+      run: |
+        cd ./parsecpp
+        zip -r   ../ParseCpp.zip     *
+        tar cvf  ../ParseCpp.tar     *
+        tar cvfz ../ParseCpp.tar.gz  *
+        tar cvfj ../ParseCpp.tar.bz2 *
+
+    - name: Create release
+      id: create_release
+      uses: actions/create-release@latest
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        body: |
+          Version ${{ github.ref }}
+        draft: false
+        prerelease: false
+
+    # Upload artifacts
+
+    - name: Upload artifacts (zip)
+      id: upload-release-asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./ParseCpp.zip
+        asset_name: ParseCpp.zip
+        asset_content_type: application/zip
+
+    - name: Upload artifacts (tar)
+      id: upload-release-asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./ParseCpp.tar
+        asset_name: ParseCpp.tar
+        asset_content_type: application/x-tar
+
+    - name: Upload artifacts (tar.gz)
+      id: upload-release-asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./ParseCpp.tar.gz
+        asset_name: ParseCpp.tar.gz
+        asset_content_type: application/gzip
+
+    - name: Upload artifacts (tar.bz2)
+      id: upload-release-asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./ParseCpp.tar.bz2
+        asset_name: ParseCpp.tar.bz2
+        asset_content_type: application/x-bzip2
+    
