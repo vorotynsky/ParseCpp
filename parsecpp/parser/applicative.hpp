@@ -68,7 +68,7 @@ namespace parsecpp
         using Result = decltype(std::declval<F>() (std::declval<S>()));
 
         template <typename F, typename Arg>
-        inline static auto apply(const Parser<F, I> *pf, const Parser<Arg, I> *parg)
+        PARSECPP_STATIC_API auto apply(const Parser<F, I> *pf, const Parser<Arg, I> *parg)
         {
             return new ApplicativeParser<F, Arg, Result<F, Arg>, I> (pf, parg);
         }

@@ -64,4 +64,33 @@ namespace parsecpp::types
     private:
         std::vector<const Destructable *> data;
     };
+
+    template <typename T>
+    struct DestructPointer
+    {
+        DestructPointer(T **value) : value(value) { }
+        DestructPointer(DestructPointer &other) = delete;
+        DestructPointer(DestructPointer &&other)
+        {
+            other.value = value;
+            value = nullptr;
+        }
+
+        ~DestructPointer() 
+        {
+            if (value != nullptr)
+                delete *value;
+        }
+
+        T *operator*() { return *value; }
+
+    private:
+        T **value;
+    };
+
+    template <typename T>
+    inline auto autodestruct(T **value)
+    {
+        return DestructPointer<T>(value);
+    }
 }

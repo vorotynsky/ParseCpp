@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include <parser/parser.hpp>
+#include "../parser/parser.hpp"
 
 namespace parsecpp::common
 {
@@ -47,7 +47,7 @@ namespace parsecpp::common
     struct PredicateMapper final
     {
         template<typename P>
-        static inline PredicateParser<I, P> *map(P predicate)
+        PARSECPP_STATIC_API PredicateParser<I, P> *map(P predicate)
         {
             return new PredicateParser<I, P>(predicate);
         }

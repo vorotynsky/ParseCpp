@@ -62,14 +62,14 @@ namespace parsecpp
         using Result = decltype(mapValue((F *)nullptr, (S *)nullptr));
 
         template <typename F, typename S>
-        inline static auto map(F function, const Parser<S, I> *parser) 
+        PARSECPP_STATIC_API auto map(F function, const Parser<S, I> *parser) 
             -> Parser<Result<F, S>, I> *
         {
             return new MappedParser<F, S, Result<F, S>, I>(function, *parser);
         }
 
         template <typename F, typename S>
-        inline static auto fmap(F function, const Parser<S, I> *parser)
+        PARSECPP_STATIC_API auto fmap(F function, const Parser<S, I> *parser)
         {
             auto curried = functional::curry(function);
             return map(curried, parser);

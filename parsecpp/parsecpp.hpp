@@ -14,6 +14,9 @@
 
 #pragma once
 
+#define PARSECPP_STATIC_API static constexpr
+
+
 #include "input/position.hpp"
 #include "input/StringInput.hpp"
 
@@ -28,6 +31,7 @@
 #include "parser/container.hpp"
 #include "parser/composition.hpp"
 #include "parser/traversable.hpp"
+#include "parser/ignore.hpp"
 
 #include "common/predicateParser.hpp"
 #include "common/character.hpp"

@@ -14,7 +14,7 @@
 
 #pragma once
 
-#include <parser/parser.hpp>
+#include "../parser/parser.hpp"
 
 namespace parsecpp::common
 {
