@@ -54,11 +54,23 @@ namespace parsecpp
         template <typename T1, typename T2>
         PARSECPP_STATIC_API auto left(const Parser<T1, I> *left, const Parser<T2, I> *right)
         {
-            return new LeftIgnoreComposition<T1, T2, I>(left, right);
+            return new RightIgnoreComposition<T1, T2, I>(left, right);
         }
 
         template <typename T1, typename T2>
         PARSECPP_STATIC_API auto right(const Parser<T1, I> *left, const Parser<T2, I> *right)
+        {
+            return new LeftIgnoreComposition<T1, T2, I>(left, right);
+        }
+
+        template <typename T1, typename T2>
+        PARSECPP_STATIC_API auto keep_left(const Parser<T1, I> *left, const Parser<T2, I> *right)
+        {
+            return new LeftIgnoreComposition<T1, T2, I>(left, right);
+        }
+
+        template <typename T1, typename T2>
+        PARSECPP_STATIC_API auto keep_right(const Parser<T1, I> *left, const Parser<T2, I> *right)
         {
             return new RightIgnoreComposition<T1, T2, I>(left, right);
         }

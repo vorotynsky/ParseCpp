@@ -37,5 +37,3 @@
 #include "common/character.hpp"
 
 #include "utils/container.hpp"
-#include "utils/curry.hpp"
-#include "utils/flatten.hpp"

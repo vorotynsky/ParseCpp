@@ -25,7 +25,7 @@ parsecpp::Parser<char, Input> *right_parser = new parsecpp::common::CharParser<I
 TEST_CASE("[ignore, left] first choise => success")
 {
     parsecpp::input::StringInput input("ab");
-    auto parser = parsecpp::Ignore<Input>::left(left_parser, right_parser);
+    auto parser = parsecpp::Ignore<Input>::right(left_parser, right_parser);
     auto result = parser->execute(input.begin());
     CHECK(*result == true);
     CHECK(result->value() == 'a');
@@ -35,7 +35,7 @@ TEST_CASE("[ignore, left] first choise => success")
 TEST_CASE("[ignore, right] second choise => success")
 {
     parsecpp::input::StringInput input("ab");
-    auto parser = parsecpp::Ignore<Input>::right(left_parser, right_parser);
+    auto parser = parsecpp::Ignore<Input>::left(left_parser, right_parser);
     auto result = parser->execute(input.begin());
     CHECK(*result == true);
     CHECK(result->value() == 'b');
@@ -45,7 +45,7 @@ TEST_CASE("[ignore, right] second choise => success")
 TEST_CASE("[ignore, left] empty input => failure")
 {
     parsecpp::input::StringInput input("");
-    auto parser = parsecpp::Ignore<Input>::left(left_parser, right_parser);
+    auto parser = parsecpp::Ignore<Input>::right(left_parser, right_parser);
     auto result = parser->execute(input.begin());
     CHECK(*result == false);
     CHECK(result->getInput() == input.begin());
@@ -55,7 +55,7 @@ TEST_CASE("[ignore, left] empty input => failure")
 TEST_CASE("[ignore, right] empty input => failure")
 {
     parsecpp::input::StringInput input("");
-    auto parser = parsecpp::Ignore<Input>::right(left_parser, right_parser);
+    auto parser = parsecpp::Ignore<Input>::left(left_parser, right_parser);
     auto result = parser->execute(input.begin());
     CHECK(*result == false);
     CHECK(result->getInput() == input.begin());
@@ -65,7 +65,7 @@ TEST_CASE("[ignore, right] empty input => failure")
 TEST_CASE("[ignore, left] invalid first char in input => success")
 {
     parsecpp::input::StringInput input("bb");
-    auto parser = parsecpp::Ignore<Input>::left(left_parser, right_parser);
+    auto parser = parsecpp::Ignore<Input>::right(left_parser, right_parser);
     auto result = parser->execute(input.begin());
     CHECK(*result == false);
     CHECK(result->getInput() == input.begin());
@@ -75,7 +75,7 @@ TEST_CASE("[ignore, left] invalid first char in input => success")
 TEST_CASE("[ignore, right] invalid first char in input => success")
 {
     parsecpp::input::StringInput input("bb");
-    auto parser = parsecpp::Ignore<Input>::right(left_parser, right_parser);
+    auto parser = parsecpp::Ignore<Input>::left(left_parser, right_parser);
     auto result = parser->execute(input.begin());
     CHECK(*result == false);
     CHECK(result->getInput() == input.begin());
@@ -85,7 +85,7 @@ TEST_CASE("[ignore, right] invalid first char in input => success")
 TEST_CASE("[ignore, left] invalid second char in input => success")
 {
     parsecpp::input::StringInput input("aa");
-    auto parser = parsecpp::Ignore<Input>::left(left_parser, right_parser);
+    auto parser = parsecpp::Ignore<Input>::right(left_parser, right_parser);
     auto result = parser->execute(input.begin());
     CHECK(*result == false);
     CHECK(result->getInput() == input.begin());
@@ -95,7 +95,7 @@ TEST_CASE("[ignore, left] invalid second char in input => success")
 TEST_CASE("[ignore, right] invalid second char in input => success")
 {
     parsecpp::input::StringInput input("aa");
-    auto parser = parsecpp::Ignore<Input>::right(left_parser, right_parser);
+    auto parser = parsecpp::Ignore<Input>::left(left_parser, right_parser);
     auto result = parser->execute(input.begin());
     CHECK(*result == false);
     CHECK(result->getInput() == input.begin());
