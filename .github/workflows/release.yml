@@ -37,7 +37,7 @@ jobs:
     # Upload artifacts
 
     - name: Upload artifacts (zip)
-      id: upload-release-asset
+      id: upload-release-asset-zip
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -48,7 +48,7 @@ jobs:
         asset_content_type: application/zip
 
     - name: Upload artifacts (tar)
-      id: upload-release-asset
+      id: upload-release-asset-tar
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -59,7 +59,7 @@ jobs:
         asset_content_type: application/x-tar
 
     - name: Upload artifacts (tar.gz)
-      id: upload-release-asset
+      id: upload-release-asset-targz
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -70,7 +70,7 @@ jobs:
         asset_content_type: application/gzip
 
     - name: Upload artifacts (tar.bz2)
-      id: upload-release-asset
+      id: upload-release-asset-tarbz2
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
