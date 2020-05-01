@@ -58,12 +58,12 @@ namespace parsecpp
             }
         }
 
-        StepParser(const Parser<T, I> *value, const Parser<T, I> *sep)
+        StepParser(const Parser<T, I> *value, const Parser<S, I> *sep)
             : value(value), sep(sep), Parser<std::vector<T>, I>() { }
 
     private:
         const Parser<T, I> *value;
-        const Parser<T, I> *sep;
+        const Parser<S, I> *sep;
     };
 }
 
